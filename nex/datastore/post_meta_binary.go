@@ -14,7 +14,8 @@ func PostMetaBinary(err error, client *nex.Client, callID uint32, dataStorePrepa
 		// * Meta binary already exists
 		if dataStorePreparePostParam.PersistenceInitParam.DeleteLastObject {
 			// * Delete existing object before uploading new one
-			database.DeleteMetaBinaryByDataID(metaBinary.DataID)
+			// TODO - Check error
+			_ = database.DeleteMetaBinaryByDataID(metaBinary.DataID)
 		}
 	}
 
