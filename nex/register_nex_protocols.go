@@ -11,5 +11,6 @@ func registerNEXProtocols() {
 
 	datastoreProtocol.GetMeta(nex_datastore.GetMeta)
 	datastoreProtocol.PostMetaBinary(nex_datastore.PostMetaBinary)
+	datastoreProtocol.CompletePostObjects(nex_datastore.CompletePostObjects)
 	datastoreProtocol.ChangeMeta(nex_datastore.ChangeMeta)
 }
