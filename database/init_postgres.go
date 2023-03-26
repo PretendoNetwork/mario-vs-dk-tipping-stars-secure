@@ -18,14 +18,14 @@ func initPostgres() {
 		data_id serial PRIMARY KEY,
 		owner_pid integer,
 		name text,
-		data_type smallint,
+		data_type integer,
 		meta_binary bytea,
-		permission smallint,
-		del_permission smallint,
-		flag smallint,
-		period smallint,
+		permission integer,
+		del_permission integer,
+		flag integer,
+		period integer,
 		tags text[],
-		persistence_slot_id smallint,
+		persistence_slot_id integer,
 		extra_data text[]
 	)`)
 	if err != nil {
