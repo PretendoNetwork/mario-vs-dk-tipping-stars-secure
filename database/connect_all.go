@@ -1,6 +1,6 @@
 package database
 
 func ConnectAll() {
-	connectMongo()
+	// * Future proofing for when/if we need Mongo
 	connectPostgres()
 }
