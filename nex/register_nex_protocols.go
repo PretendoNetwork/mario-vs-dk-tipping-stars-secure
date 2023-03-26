@@ -9,6 +9,7 @@ import (
 func registerNEXProtocols() {
 	datastoreProtocol := nexproto.NewDataStoreProtocol(globals.NEXServer)
 
+	datastoreProtocol.DeleteObject(nex_datastore.DeleteObject)
 	datastoreProtocol.GetMeta(nex_datastore.GetMeta)
 	datastoreProtocol.PostMetaBinary(nex_datastore.PostMetaBinary)
 	datastoreProtocol.CompletePostObjects(nex_datastore.CompletePostObjects)
