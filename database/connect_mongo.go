@@ -1,11 +1,11 @@
-package main
+package database
 
 import (
 	"context"
 	"os"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -13,7 +13,7 @@ import (
 var mongoClient *mongo.Client
 var mongoContext context.Context
 var mongoDatabase *mongo.Database
-var mongoCollection *mongo.Collection
+var MongoCollection *mongo.Collection
 
 func connectMongo() {
 	mongoClient, _ = mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_URI")))
@@ -21,21 +21,7 @@ func connectMongo() {
 	_ = mongoClient.Connect(mongoContext)
 
 	mongoDatabase = mongoClient.Database("pretendo")
-	mongoCollection = mongoDatabase.Collection("nexaccounts")
-}
+	MongoCollection = mongoDatabase.Collection("pnids")
 
-func getNEXAccountByPID(pid uint32) bson.M {
-	var result bson.M
-
-	err := mongoCollection.FindOne(context.TODO(), bson.D{{Key: "pid", Value: pid}}, options.FindOne()).Decode(&result)
-
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return nil
-		}
-
-		panic(err)
-	}
-
-	return result
+	globals.Logger.Success("Connected to Mongo!")
 }

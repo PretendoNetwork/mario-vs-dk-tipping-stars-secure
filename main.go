@@ -1,43 +1,18 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"sync"
 
-	"github.com/PretendoNetwork/nex-go"
-	secureconnection "github.com/PretendoNetwork/nex-protocols-common-go/secure-connection"
+	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/nex"
 )
 
-var nexServer *nex.Server
+var wg sync.WaitGroup
 
 func main() {
-	nexServer = nex.NewServer()
-	nexServer.SetPrudpVersion(1)
-	nexServer.SetNexVersion(30701)
-	nexServer.SetKerberosKeySize(32)
-	nexServer.SetKerberosPassword(os.Getenv("KERBEROS_PASSWORD"))
-	nexServer.SetAccessKey("d8927c3f")
+	wg.Add(1)
 
-	nexServer.On("Data", func(packet *nex.PacketV1) {
-		request := packet.RMCRequest()
+	// TODO - Add gRPC server
+	go nex.StartNEXServer()
 
-		fmt.Println("==MvDK:TS - Secure==")
-		fmt.Printf("Protocol ID: %#v\n", request.ProtocolID())
-		fmt.Printf("Method ID: %#v\n", request.MethodID())
-		fmt.Println("==================")
-	})
-
-	nexServer.On("Packet", func(packet *nex.PacketV1) {
-		fmt.Println(packet.Type())
-	})
-
-	secureConnectionProtocol := secureconnection.NewCommonSecureConnectionProtocol(nexServer)
-
-	secureConnectionProtocol.AddConnection(addConnection)             // * Stubbed
-	secureConnectionProtocol.UpdateConnection(updateConnection)       // * Stubbed
-	secureConnectionProtocol.DoesConnectionExist(doesConnectionExist) // * Stubbed
-
-	secureConnectionProtocol.Register(register) // * Override the common handler becuase needs a specific format maybe?
-
-	nexServer.Listen(":60041")
+	wg.Wait()
 }
