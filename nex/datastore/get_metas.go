@@ -28,6 +28,18 @@ func GetMetas(err error, client *nex.Client, callID uint32, dataIDs []uint64, pa
 		var pResult *nex.Result
 
 		if err == sql.ErrNoRows {
+			pMetaInfo.Permission = nexproto.NewDataStorePermission()
+			pMetaInfo.Permission.Permission = 0
+			pMetaInfo.Permission.RecipientIds = make([]uint32, 0)
+			pMetaInfo.DelPermission = nexproto.NewDataStorePermission()
+			pMetaInfo.DelPermission.Permission = 0
+			pMetaInfo.DelPermission.RecipientIds = make([]uint32, 0)
+			pMetaInfo.CreatedTime = nex.NewDateTime(0)
+			pMetaInfo.UpdatedTime = nex.NewDateTime(0)
+			pMetaInfo.ReferredTime = nex.NewDateTime(0)
+			pMetaInfo.ExpireTime = nex.NewDateTime(0)
+			pMetaInfo.Ratings = make([]*nexproto.DataStoreRatingInfoWithSlot, 0)
+
 			pResult = nex.NewResultError(nex.Errors.DataStore.NotFound)
 		} else { // TODO - Check for more errors
 			pMetaInfo.DataID = uint64(metaBinary.DataID)
@@ -42,15 +54,15 @@ func GetMetas(err error, client *nex.Client, callID uint32, dataIDs []uint64, pa
 			pMetaInfo.DelPermission = nexproto.NewDataStorePermission()
 			pMetaInfo.DelPermission.Permission = metaBinary.DeletePermission
 			pMetaInfo.DelPermission.RecipientIds = make([]uint32, 0)
-			pMetaInfo.CreatedTime = nex.NewDateTime(nex.NewDateTime(0).Now()) // TODO - Change this!!
-			pMetaInfo.UpdatedTime = nex.NewDateTime(nex.NewDateTime(0).Now()) // TODO - Change this!!
+			pMetaInfo.CreatedTime = metaBinary.CreationTime
+			pMetaInfo.UpdatedTime = metaBinary.UpdatedTime
 			pMetaInfo.Period = metaBinary.Period
 			pMetaInfo.Status = 0
 			pMetaInfo.ReferredCnt = 0
 			pMetaInfo.ReferDataID = 0
 			pMetaInfo.Flag = metaBinary.Flag
-			pMetaInfo.ReferredTime = nex.NewDateTime(nex.NewDateTime(0).Now()) // TODO - Change this!!
-			pMetaInfo.ExpireTime = nex.NewDateTime(nex.NewDateTime(0).Now())   // TODO - Change this!!
+			pMetaInfo.ReferredTime = metaBinary.ReferredTime
+			pMetaInfo.ExpireTime = metaBinary.ExpireTime
 			pMetaInfo.Tags = metaBinary.Tags
 			pMetaInfo.Ratings = make([]*nexproto.DataStoreRatingInfoWithSlot, 0) // TODO - Store ratings in DB
 

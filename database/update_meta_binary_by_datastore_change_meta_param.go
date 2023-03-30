@@ -1,6 +1,8 @@
 package database
 
 import (
+	"time"
+
 	nexproto "github.com/PretendoNetwork/nex-protocols-go"
 	"github.com/lib/pq"
 )
@@ -8,6 +10,8 @@ import (
 func UpdateMetaBinaryByDataStoreChangeMetaParam(dataStoreChangeMetaParam *nexproto.DataStoreChangeMetaParam) error {
 	// TODO - Check dataStoreChangeMetaParam.ModifiesFlag
 	// TODO - Check dataStoreChangeMetaParam.CompareParam
+
+	now := time.Now().UnixNano()
 
 	_, err := Postgres.Exec(`
 		UPDATE mvdkts.meta_binaries
@@ -18,8 +22,9 @@ func UpdateMetaBinaryByDataStoreChangeMetaParam(dataStoreChangeMetaParam *nexpro
 		period=$4,
 		meta_binary=$5,
 		tags=$6,
-		data_type=$7
-		WHERE data_id=$8`,
+		data_type=$7,
+		updated_time=$8
+		WHERE data_id=$9`,
 		dataStoreChangeMetaParam.Name,
 		dataStoreChangeMetaParam.Permission.Permission,
 		dataStoreChangeMetaParam.DelPermission.Permission,
@@ -27,6 +32,7 @@ func UpdateMetaBinaryByDataStoreChangeMetaParam(dataStoreChangeMetaParam *nexpro
 		dataStoreChangeMetaParam.MetaBinary,
 		pq.Array(dataStoreChangeMetaParam.Tags),
 		dataStoreChangeMetaParam.DataType,
+		now,
 		dataStoreChangeMetaParam.DataID,
 	)
 

@@ -1,5 +1,7 @@
 package types
 
+import "github.com/PretendoNetwork/nex-go"
+
 type MetaBinary struct {
 	DataID            uint32
 	OwnerPID          uint32
@@ -13,6 +15,10 @@ type MetaBinary struct {
 	Tags              []string
 	PersistenceSlotID uint16
 	ExtraData         []string
+	CreationTime      *nex.DateTime
+	UpdatedTime       *nex.DateTime
+	ReferredTime      *nex.DateTime
+	ExpireTime        *nex.DateTime
 }
 
 func NewMetaBinary() *MetaBinary {

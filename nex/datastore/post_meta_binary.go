@@ -16,16 +16,24 @@ func PostMetaBinary(err error, client *nex.Client, callID uint32, dataStorePrepa
 			// * Delete existing object before uploading new one
 			// TODO - Check error
 			_ = database.DeleteMetaBinaryByDataID(metaBinary.DataID)
+			// TODO - Delete old ratings?
 		}
 	}
 
 	// TODO - See if this is actually always the case?
-	// * Always upload a new object
-	dataID := uint64(database.InsertMetaBinaryByDataStorePreparePostParamWithOwnerPID(dataStorePreparePostParam, client.PID()))
+	// * Always upload a new object (?)
+	dataID := database.InsertMetaBinaryByDataStorePreparePostParamWithOwnerPID(dataStorePreparePostParam, client.PID())
+
+	for i := 0; i < len(dataStorePreparePostParam.RatingInitParams); i++ {
+		ratingInitParam := dataStorePreparePostParam.RatingInitParams[i]
+
+		// TODO - Check error
+		_ = database.InsertRatingByDataIDAndDataStoreRatingInitParamWithSlot(dataID, ratingInitParam)
+	}
 
 	rmcResponseStream := nex.NewStreamOut(globals.NEXServer)
 
-	rmcResponseStream.WriteUInt64LE(dataID)
+	rmcResponseStream.WriteUInt64LE(uint64(dataID))
 
 	rmcResponseBody := rmcResponseStream.Bytes()
 
