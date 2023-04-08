@@ -3,11 +3,11 @@ package database
 import (
 	"time"
 
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 	"github.com/lib/pq"
 )
 
-func UpdateMetaBinaryByDataStoreChangeMetaParam(dataStoreChangeMetaParam *nexproto.DataStoreChangeMetaParam) error {
+func UpdateMetaBinaryByDataStoreChangeMetaParam(dataStoreChangeMetaParam *datastore.DataStoreChangeMetaParam) error {
 	// TODO - Check dataStoreChangeMetaParam.ModifiesFlag
 	// TODO - Check dataStoreChangeMetaParam.CompareParam
 

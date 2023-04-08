@@ -4,15 +4,15 @@ import (
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/database"
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
 	"github.com/PretendoNetwork/nex-go"
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 )
 
-func DeleteObject(err error, client *nex.Client, callID uint32, param *nexproto.DataStoreDeleteParam) {
+func DeleteObject(err error, client *nex.Client, callID uint32, param *datastore.DataStoreDeleteParam) {
 	// TODO - Check error and respond appropriately
 	_ = database.DeleteMetaBinaryByDataID(uint32(param.DataID))
 
-	rmcResponse := nex.NewRMCResponse(nexproto.DataStoreProtocolID, callID)
-	rmcResponse.SetSuccess(nexproto.DataStoreMethodDeleteObject, nil)
+	rmcResponse := nex.NewRMCResponse(datastore.ProtocolID, callID)
+	rmcResponse.SetSuccess(datastore.MethodDeleteObject, nil)
 
 	rmcResponseBytes := rmcResponse.Bytes()
 

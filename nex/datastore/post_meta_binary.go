@@ -4,10 +4,10 @@ import (
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/database"
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
 	"github.com/PretendoNetwork/nex-go"
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 )
 
-func PostMetaBinary(err error, client *nex.Client, callID uint32, dataStorePreparePostParam *nexproto.DataStorePreparePostParam) {
+func PostMetaBinary(err error, client *nex.Client, callID uint32, dataStorePreparePostParam *datastore.DataStorePreparePostParam) {
 	metaBinary := database.GetMetaBinaryByTypeAndOwnerPIDAndSlotID(dataStorePreparePostParam.DataType, client.PID(), uint8(dataStorePreparePostParam.PersistenceInitParam.PersistenceSlotId))
 
 	if metaBinary.DataID != 0 {
@@ -37,8 +37,8 @@ func PostMetaBinary(err error, client *nex.Client, callID uint32, dataStorePrepa
 
 	rmcResponseBody := rmcResponseStream.Bytes()
 
-	rmcResponse := nex.NewRMCResponse(nexproto.DataStoreProtocolID, callID)
-	rmcResponse.SetSuccess(nexproto.DataStoreMethodPostMetaBinary, rmcResponseBody)
+	rmcResponse := nex.NewRMCResponse(datastore.ProtocolID, callID)
+	rmcResponse.SetSuccess(datastore.MethodPostMetaBinary, rmcResponseBody)
 
 	rmcResponseBytes := rmcResponse.Bytes()
 

@@ -4,18 +4,18 @@ import (
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/database"
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
 	"github.com/PretendoNetwork/nex-go"
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 )
 
-func RateObject(err error, client *nex.Client, callID uint32, target *nexproto.DataStoreRatingTarget, param *nexproto.DataStoreRateObjectParam, fetchRatings bool) {
+func RateObject(err error, client *nex.Client, callID uint32, target *datastore.DataStoreRatingTarget, param *datastore.DataStoreRateObjectParam, fetchRatings bool) {
 	// TODO - Check error
 	_ = database.UpdateRatingByDataIDAndSlot(uint32(target.DataID), target.Slot, param.RatingValue)
 
-	rmcResponse := nex.NewRMCResponse(nexproto.DataStoreProtocolID, callID)
+	rmcResponse := nex.NewRMCResponse(datastore.ProtocolID, callID)
 
 	rmcResponseStream := nex.NewStreamOut(globals.NEXServer)
 
-	pRating := nexproto.NewDataStoreRatingInfo()
+	pRating := datastore.NewDataStoreRatingInfo()
 
 	if fetchRatings {
 		// TODO - Check error
@@ -28,7 +28,7 @@ func RateObject(err error, client *nex.Client, callID uint32, target *nexproto.D
 
 	rmcResponseBody := rmcResponseStream.Bytes()
 
-	rmcResponse.SetSuccess(nexproto.DataStoreMethodRateObject, rmcResponseBody)
+	rmcResponse.SetSuccess(datastore.MethodRateObject, rmcResponseBody)
 
 	rmcResponseBytes := rmcResponse.Bytes()
 

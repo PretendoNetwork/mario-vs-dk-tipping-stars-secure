@@ -3,14 +3,14 @@ package nex_datastore
 import (
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
 	"github.com/PretendoNetwork/nex-go"
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 )
 
 func CompletePostObjects(err error, client *nex.Client, callID uint32, dataIDs []uint64) {
 	// TODO - Do something with the data IDs
 
-	rmcResponse := nex.NewRMCResponse(nexproto.DataStoreProtocolID, callID)
-	rmcResponse.SetSuccess(nexproto.DataStoreMethodCompletePostObjects, nil)
+	rmcResponse := nex.NewRMCResponse(datastore.ProtocolID, callID)
+	rmcResponse.SetSuccess(datastore.MethodCompletePostObjects, nil)
 
 	rmcResponseBytes := rmcResponse.Bytes()
 

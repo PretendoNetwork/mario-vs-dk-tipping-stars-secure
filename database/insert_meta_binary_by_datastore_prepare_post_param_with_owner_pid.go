@@ -4,11 +4,11 @@ import (
 	"time"
 
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 	"github.com/lib/pq"
 )
 
-func InsertMetaBinaryByDataStorePreparePostParamWithOwnerPID(dataStorePreparePostParam *nexproto.DataStorePreparePostParam, pid uint32) uint32 {
+func InsertMetaBinaryByDataStorePreparePostParamWithOwnerPID(dataStorePreparePostParam *datastore.DataStorePreparePostParam, pid uint32) uint32 {
 	var dataID uint32
 
 	now := time.Now().UnixNano()

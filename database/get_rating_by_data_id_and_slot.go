@@ -4,13 +4,13 @@ import (
 	"database/sql"
 
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 )
 
-func GetRatingByDataIDAndSlot(dataID uint32, slot int) (*nexproto.DataStoreRatingInfoWithSlot, error) {
-	rating := nexproto.NewDataStoreRatingInfoWithSlot()
+func GetRatingByDataIDAndSlot(dataID uint32, slot int) (*datastore.DataStoreRatingInfoWithSlot, error) {
+	rating := datastore.NewDataStoreRatingInfoWithSlot()
 	rating.Slot = int8(slot)
-	rating.Rating = nexproto.NewDataStoreRatingInfo()
+	rating.Rating = datastore.NewDataStoreRatingInfo()
 
 	err := Postgres.QueryRow(`
 	SELECT

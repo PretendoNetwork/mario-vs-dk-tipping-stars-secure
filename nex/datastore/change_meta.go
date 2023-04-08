@@ -4,15 +4,15 @@ import (
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/database"
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
 	"github.com/PretendoNetwork/nex-go"
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 )
 
-func ChangeMeta(err error, client *nex.Client, callID uint32, dataStoreChangeMetaParam *nexproto.DataStoreChangeMetaParam) {
+func ChangeMeta(err error, client *nex.Client, callID uint32, param *datastore.DataStoreChangeMetaParam) {
 	// TODO - Check error and respond appropriately
-	_ = database.UpdateMetaBinaryByDataStoreChangeMetaParam(dataStoreChangeMetaParam)
+	_ = database.UpdateMetaBinaryByDataStoreChangeMetaParam(param)
 
-	rmcResponse := nex.NewRMCResponse(nexproto.DataStoreProtocolID, callID)
-	rmcResponse.SetSuccess(nexproto.DataStoreMethodChangeMeta, nil)
+	rmcResponse := nex.NewRMCResponse(datastore.ProtocolID, callID)
+	rmcResponse.SetSuccess(datastore.MethodChangeMeta, nil)
 
 	rmcResponseBytes := rmcResponse.Bytes()
 

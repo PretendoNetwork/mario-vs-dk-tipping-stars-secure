@@ -6,14 +6,14 @@ import (
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/database"
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
 	"github.com/PretendoNetwork/nex-go"
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 )
 
-func GetMeta(err error, client *nex.Client, callID uint32, dataStoreGetMetaParam *nexproto.DataStoreGetMetaParam) {
-	var pMetaInfo *nexproto.DataStoreMetaInfo
+func GetMeta(err error, client *nex.Client, callID uint32, dataStoreGetMetaParam *datastore.DataStoreGetMetaParam) {
+	var pMetaInfo *datastore.DataStoreMetaInfo
 	var errorCode uint32
 
-	rmcResponse := nex.NewRMCResponse(nexproto.DataStoreProtocolID, callID)
+	rmcResponse := nex.NewRMCResponse(datastore.ProtocolID, callID)
 
 	// TODO - Check dataStoreGetMetaParam.ResultOption and dataStoreGetMetaParam.AccessPassword?
 	if dataStoreGetMetaParam.DataID == 0 {
@@ -38,7 +38,7 @@ func GetMeta(err error, client *nex.Client, callID uint32, dataStoreGetMetaParam
 
 		rmcResponseBody := rmcResponseStream.Bytes()
 
-		rmcResponse.SetSuccess(nexproto.DataStoreMethodGetMeta, rmcResponseBody)
+		rmcResponse.SetSuccess(datastore.MethodGetMeta, rmcResponseBody)
 	} else {
 		rmcResponse.SetError(errorCode)
 	}
@@ -59,9 +59,9 @@ func GetMeta(err error, client *nex.Client, callID uint32, dataStoreGetMetaParam
 	globals.NEXServer.Send(responsePacket)
 }
 
-func getMetaProfileInfo(dataStoreGetMetaParam *nexproto.DataStoreGetMetaParam) (*nexproto.DataStoreMetaInfo, uint32) {
+func getMetaProfileInfo(dataStoreGetMetaParam *datastore.DataStoreGetMetaParam) (*datastore.DataStoreMetaInfo, uint32) {
 	metaBinary := database.GetMetaBinaryByTypeAndOwnerPIDAndSlotID(122, dataStoreGetMetaParam.PersistenceTarget.OwnerID, 0)
-	pMetaInfo := nexproto.NewDataStoreMetaInfo()
+	pMetaInfo := datastore.NewDataStoreMetaInfo()
 
 	if metaBinary.DataID == 0 {
 		// * Meta binary doesn't exist
@@ -74,10 +74,10 @@ func getMetaProfileInfo(dataStoreGetMetaParam *nexproto.DataStoreGetMetaParam) (
 	pMetaInfo.Name = metaBinary.Name
 	pMetaInfo.DataType = metaBinary.DataType
 	pMetaInfo.MetaBinary = metaBinary.Buffer
-	pMetaInfo.Permission = nexproto.NewDataStorePermission()
+	pMetaInfo.Permission = datastore.NewDataStorePermission()
 	pMetaInfo.Permission.Permission = 0
 	pMetaInfo.Permission.RecipientIds = make([]uint32, 0)
-	pMetaInfo.DelPermission = nexproto.NewDataStorePermission()
+	pMetaInfo.DelPermission = datastore.NewDataStorePermission()
 	pMetaInfo.DelPermission.Permission = 3
 	pMetaInfo.DelPermission.RecipientIds = make([]uint32, 0)
 	pMetaInfo.CreatedTime = metaBinary.CreationTime
@@ -90,14 +90,14 @@ func getMetaProfileInfo(dataStoreGetMetaParam *nexproto.DataStoreGetMetaParam) (
 	pMetaInfo.ReferredTime = metaBinary.ReferredTime
 	pMetaInfo.ExpireTime = metaBinary.ExpireTime
 	pMetaInfo.Tags = metaBinary.Tags
-	pMetaInfo.Ratings = make([]*nexproto.DataStoreRatingInfoWithSlot, 0)
+	pMetaInfo.Ratings = make([]*datastore.DataStoreRatingInfoWithSlot, 0)
 
 	return pMetaInfo, 0
 }
 
-func getMetaTipBucket(dataStoreGetMetaParam *nexproto.DataStoreGetMetaParam) (*nexproto.DataStoreMetaInfo, uint32) {
+func getMetaTipBucket(dataStoreGetMetaParam *datastore.DataStoreGetMetaParam) (*datastore.DataStoreMetaInfo, uint32) {
 	metaBinary := database.GetMetaBinaryByTypeAndOwnerPIDAndSlotID(123, dataStoreGetMetaParam.PersistenceTarget.OwnerID, 1)
-	pMetaInfo := nexproto.NewDataStoreMetaInfo()
+	pMetaInfo := datastore.NewDataStoreMetaInfo()
 
 	if metaBinary.DataID == 0 {
 		// * Meta binary doesn't exist
@@ -116,7 +116,7 @@ func getMetaTipBucket(dataStoreGetMetaParam *nexproto.DataStoreGetMetaParam) (*n
 	//tipBucketPlayCount.Rating.Count = 40
 	//tipBucketPlayCount.Rating.TotalValue = 150
 
-	ratings := make([]*nexproto.DataStoreRatingInfoWithSlot, 0, 3)
+	ratings := make([]*datastore.DataStoreRatingInfoWithSlot, 0, 3)
 
 	ratings = append(ratings, tipBucketExtraTipTotal)
 	ratings = append(ratings, tipBucketExtraTipCount)
@@ -128,10 +128,10 @@ func getMetaTipBucket(dataStoreGetMetaParam *nexproto.DataStoreGetMetaParam) (*n
 	pMetaInfo.Name = metaBinary.Name
 	pMetaInfo.DataType = metaBinary.DataType
 	pMetaInfo.MetaBinary = metaBinary.Buffer
-	pMetaInfo.Permission = nexproto.NewDataStorePermission()
+	pMetaInfo.Permission = datastore.NewDataStorePermission()
 	pMetaInfo.Permission.Permission = 0
 	pMetaInfo.Permission.RecipientIds = make([]uint32, 0)
-	pMetaInfo.DelPermission = nexproto.NewDataStorePermission()
+	pMetaInfo.DelPermission = datastore.NewDataStorePermission()
 	pMetaInfo.DelPermission.Permission = 3
 	pMetaInfo.DelPermission.RecipientIds = make([]uint32, 0)
 	pMetaInfo.CreatedTime = metaBinary.CreationTime

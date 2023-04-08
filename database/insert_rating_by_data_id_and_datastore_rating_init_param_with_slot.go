@@ -2,10 +2,10 @@ package database
 
 import (
 	"github.com/PretendoNetwork/mario-vs-dk-tipping-stars-secure/globals"
-	nexproto "github.com/PretendoNetwork/nex-protocols-go"
+	"github.com/PretendoNetwork/nex-protocols-go/datastore"
 )
 
-func InsertRatingByDataIDAndDataStoreRatingInitParamWithSlot(dataID uint32, ratingInitParam *nexproto.DataStoreRatingInitParamWithSlot) error {
+func InsertRatingByDataIDAndDataStoreRatingInitParamWithSlot(dataID uint32, ratingInitParam *datastore.DataStoreRatingInitParamWithSlot) error {
 	_, err := Postgres.Exec(`
 		INSERT INTO mvdkts.ratings (
 			data_id,
